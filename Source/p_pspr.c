@@ -50,7 +50,6 @@ rcsid[] = "$Id: p_pspr.c,v 1.13 1998/05/07 00:53:36 killough Exp $";
 #define BFGCELLS bfgcells        /* Ty 03/09/98 externalized in p_inter.c */
 
 extern void P_Thrust(player_t *, angle_t, fixed_t);
-int weapon_recoil;      // weapon recoil
 
 // The following array holds the recoil values         // phares
 

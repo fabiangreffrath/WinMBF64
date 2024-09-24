@@ -16,9 +16,12 @@ PKG_CHECK_MODULES([SDL],       [sdl])
 PKG_CHECK_MODULES([SDL_mixer], [SDL_mixer])
 PKG_CHECK_MODULES([SDL_net],   [SDL_net])
 AC_DEFINE([MY_SDL_VER])
+AC_DEFINE([DOGS])
+AC_DEFINE([BETA])
+AC_DEFINE([RANGECHECK])
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h limits.h malloc.h stddef.h stdlib.h string.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h limits.h malloc.h stddef.h stdint.h stdlib.h string.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL

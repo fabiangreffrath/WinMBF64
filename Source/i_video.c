@@ -451,7 +451,6 @@ void I_UpdateNoBlit (void)
 int use_vsync;     // killough 2/8/98: controls whether vsync is called
 int page_flip;     // killough 8/15/98: enables page flipping
 int hires;
-boolean noblit;
 
 // haleyjd 05/11/09: low-level video scaling
 static int real_width;
