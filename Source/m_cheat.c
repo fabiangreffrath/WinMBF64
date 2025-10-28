@@ -49,16 +49,16 @@ rcsid[] = "$Id: m_cheat.c,v 1.7 1998/05/12 12:47:00 phares Exp $";
 //
 //-----------------------------------------------------------------------------
 
-static void cheat_mus();
+static void cheat_mus(char *buf);
 static void cheat_choppers();
 static void cheat_god();
 static void cheat_fa();
 static void cheat_k();
 static void cheat_kfa();
 static void cheat_noclip();
-static void cheat_pw();
+static void cheat_pw(int pw);
 static void cheat_behold();
-static void cheat_clev();
+static void cheat_clev(char *buf);
 static void cheat_mypos();
 static void cheat_comp();
 static void cheat_friction();
@@ -70,11 +70,11 @@ static void cheat_hom();
 static void cheat_fast();
 static void cheat_key();
 static void cheat_keyx();
-static void cheat_keyxx();
+static void cheat_keyxx(int key);
 static void cheat_weap();
-static void cheat_weapx();
+static void cheat_weapx(char *buf);
 static void cheat_ammo();
-static void cheat_ammox();
+static void cheat_ammox(char *buf);
 static void cheat_smart();
 static void cheat_pitch();
 static void cheat_nuke();
@@ -111,7 +111,7 @@ static void cheat_tst();
 
 struct cheat_s cheat[] = {
   {"idmus",      "Change music",      always,
-   cheat_mus,      -2},
+   {.s = cheat_mus}, -2},
 
   {"idchoppers", "Chainsaw",          not_net | not_demo,
    cheat_choppers },
@@ -135,28 +135,28 @@ struct cheat_s cheat[] = {
    cheat_noclip },
 
   {"idbeholdv",  "Invincibility",     not_net | not_demo,
-   cheat_pw,  pw_invulnerability },
+   {.i = cheat_pw}, pw_invulnerability },
 
   {"idbeholds",  "Berserk",           not_net | not_demo,
-   cheat_pw,  pw_strength        },
+   {.i = cheat_pw}, pw_strength },
 
   {"idbeholdi",  "Invisibility",      not_net | not_demo,  
-   cheat_pw,  pw_invisibility    },
+   {.i = cheat_pw}, pw_invisibility },
 
   {"idbeholdr",  "Radiation Suit",    not_net | not_demo,
-   cheat_pw,  pw_ironfeet        },
+   {.i = cheat_pw}, pw_ironfeet },
 
   {"idbeholda",  "Auto-map",          not_net | not_demo,
-   cheat_pw,  pw_allmap          },
+   {.i = cheat_pw}, pw_allmap },
 
   {"idbeholdl",  "Lite-Amp Goggles",  not_net | not_demo,
-   cheat_pw,  pw_infrared        },
+   {.i = cheat_pw}, pw_infrared },
 
   {"idbehold",   "BEHOLD menu",       not_net | not_demo,
    cheat_behold   },
 
   {"idclev",     "Level Warp",        not_net | not_demo | not_menu,
-   cheat_clev,    -2},
+   {.s = cheat_clev}, -2},
 
   {"idmypos",    "Player Position",   not_net | not_demo,
    cheat_mypos    },
@@ -186,34 +186,34 @@ struct cheat_s cheat[] = {
    cheat_keyx  },
 
   {"keyrc",   NULL,                   not_net | not_demo, 
-   cheat_keyxx, it_redcard    },
+   {.i = cheat_keyxx}, it_redcard },
 
   {"keyyc",   NULL,                   not_net | not_demo,
-   cheat_keyxx, it_yellowcard },
+   {.i = cheat_keyxx}, it_yellowcard },
 
   {"keybc",   NULL,                   not_net | not_demo, 
-   cheat_keyxx, it_bluecard   },
+   {.i = cheat_keyxx}, it_bluecard },
 
   {"keyrs",   NULL,                   not_net | not_demo,
-   cheat_keyxx, it_redskull   },
+   {.i = cheat_keyxx}, it_redskull },
 
   {"keyys",   NULL,                   not_net | not_demo,
-   cheat_keyxx, it_yellowskull},
+   {.i = cheat_keyxx}, it_yellowskull },
 
   {"keybs",   NULL,                   not_net | not_demo,
-   cheat_keyxx, it_blueskull  },  // killough 2/16/98: end generalized keys
+   {.i = cheat_keyxx}, it_blueskull },  // killough 2/16/98: end generalized keys
 
   {"weap",    NULL,                   not_net | not_demo,
    cheat_weap  },     // killough 2/16/98: generalized weapon cheats
 
   {"weap",    NULL,                   not_net | not_demo,
-   cheat_weapx, -1},
+   {.s = cheat_weapx}, -1},
 
   {"ammo",    NULL,                   not_net | not_demo,
    cheat_ammo  },
 
   {"ammo",    NULL,                   not_net | not_demo,
-   cheat_ammox, -1},  // killough 2/16/98: end generalized weapons
+   {.s = cheat_ammox}, -1},  // killough 2/16/98: end generalized weapons
 
   {"tran",    NULL,                   always,
    cheat_tran  },     // invoke translucency         // phares
@@ -286,8 +286,7 @@ static void cheat_autoaim()
 }
 #endif
 
-static void cheat_mus(buf)
-char buf[3];
+static void cheat_mus(char *buf)
 {
   int musnum;
   
@@ -433,8 +432,7 @@ static void cheat_behold()
 }
 
 // 'clev' change-level cheat
-static void cheat_clev(buf)
-char buf[3];
+static void cheat_clev(char *buf)
 {
   int epsd, map;
 
@@ -534,7 +532,7 @@ static void cheat_massacre()    // jff 2/01/98 kill all monsters
   int mask = MF_FRIEND;
   do
     while ((currentthinker=currentthinker->next)!=&thinkercap)
-      if (currentthinker->function == P_MobjThinker &&
+      if (currentthinker->function.p1 == P_MobjThinker &&
 	  !(((mobj_t *) currentthinker)->flags & mask) && // killough 7/20/98
 	  (((mobj_t *) currentthinker)->flags & MF_COUNTKILL ||
 	   ((mobj_t *) currentthinker)->type == MT_SKULL))
@@ -607,8 +605,7 @@ static void cheat_weap()
     "Weapon number 1-9" : "Weapon number 1-8";
 }
 
-static void cheat_weapx(buf)
-char buf[3];
+static void cheat_weapx(char *buf)
 {
   int w = *buf - '1';
 
@@ -637,8 +634,7 @@ static void cheat_ammo()
   plyr->message = "Ammo 1-4, Backpack";  // Ty 03/27/98 - *not* externalized
 }
 
-static void cheat_ammox(buf)
-char buf[1];
+static void cheat_ammox(char *buf)
 {
   int a = *buf - '1';
   if (*buf == 'b')  // Ty 03/27/98 - strings *not* externalized
@@ -702,7 +698,7 @@ boolean M_FindCheats(int key)
     {
       *arg++ = tolower(key);             // store key in arg buffer
       if (!--argsleft)                   // if last key in arg list,
-        cheat[cht].func(argbuf);         // process the arg buffer
+        cheat[cht].func.s(argbuf);       // process the arg buffer
       return 1;                          // affirmative response
     }
 
@@ -758,7 +754,7 @@ boolean M_FindCheats(int key)
         if (!matchedbefore)               // allow only one cheat at a time 
           {
             matchedbefore = ret = 1;      // responder has eaten key
-            cheat[i].func(cheat[i].arg);  // call cheat handler
+            cheat[i].func.i(cheat[i].arg); // call cheat handler
           }
   return ret;
 }

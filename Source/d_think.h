@@ -31,8 +31,21 @@
 #ifndef __D_THINK__
 #define __D_THINK__
 
+struct player_s;
+struct pspdef_s;
+struct mobj_s;
+
 // killough 11/98: convert back to C instead of C++
-typedef  void (*actionf_t)();
+typedef  void (*actionf_v)(void);
+typedef  void (*actionf_p1)(struct mobj_s *);
+typedef  void (*actionf_p2)(struct player_s *, struct pspdef_s *);
+
+typedef union actionf_u
+{
+  actionf_v v;
+  actionf_p1 p1;
+  actionf_p2 p2;
+} actionf_t;
 
 // Historically, "think_t" is yet another function 
 // pointer to a routine to handle an actor.

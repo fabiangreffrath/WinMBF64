@@ -103,9 +103,9 @@ static void P_SetPsprite(player_t *player, int position, statenum_t stnum)
 
       // Call action routine.
       // Modified handling.
-      if (state->action)
+      if (state->action.p2)
         {
-          state->action(player, psp);
+          state->action.p2(player, psp);
           if (!psp->state)
             break;
         }

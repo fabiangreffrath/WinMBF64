@@ -31,17 +31,15 @@
 #define __DOOMTYPE__
 
 #include <stdint.h> // [FG] intptr_t type
+#include <stdbool.h>
 
-#ifndef __BYTEBOOL__
-#define __BYTEBOOL__
 // Fixed to use builtin bool type with C++.
-#ifdef __cplusplus
-typedef bool boolean;
+#if __bool_true_false_are_defined
+typedef int boolean;
 #else
 typedef enum {false, true} boolean;
 #endif
 typedef unsigned char byte;
-#endif
 
 // [FG] stdint.h based 64-bit integer type
 typedef uint64_t ULong64;

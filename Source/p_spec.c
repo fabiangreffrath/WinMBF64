@@ -2566,7 +2566,7 @@ static void Add_Scroller(int type, fixed_t dx, fixed_t dy,
                          int control, int affectee, int accel)
 {
   scroll_t *s = Z_Malloc(sizeof *s, PU_LEVSPEC, 0);
-  s->thinker.function = T_Scroll;
+  s->thinker.function.p1 = (actionf_p1)T_Scroll;
   s->type = type;
   s->dx = dx;
   s->dy = dy;
@@ -2859,7 +2859,7 @@ static void Add_Pusher(int type, int x_mag, int y_mag,
 {
   pusher_t *p = Z_Malloc(sizeof *p, PU_LEVSPEC, 0);
 
-  p->thinker.function = T_Pusher;
+  p->thinker.function.p1 = (actionf_p1)T_Pusher;
   p->source = source;
   p->type = type;
   p->x_mag = x_mag>>FRACBITS;

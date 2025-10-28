@@ -31,6 +31,13 @@
 
 // killough 4/16/98: Cheat table structure
 
+typedef union
+{
+  void (*v)(void);
+  void (*i)(int);
+  void (*s)(char *);
+} cheatf_t;
+
 extern struct cheat_s {
   const unsigned char *cheat;
   const char *const deh_cheat;
@@ -44,7 +51,7 @@ extern struct cheat_s {
     beta_only = 32,                  // killough 7/24/98
     not_net = not_dm | not_coop
   } const when;
-  void (*const func)();
+  const cheatf_t func;
   const int arg;
   ULong64 code, mask;
   boolean deh_modified;                // killough 9/12/98

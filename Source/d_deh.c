@@ -1834,7 +1834,7 @@ void deh_procPointer(DEHFILE *fpin, FILE* fpout, char *line) // done
           // Write BEX-oriented line to match:
           for (i=0;i<NUMSTATES;i++)
             {
-              if (deh_bexptrs[i].cptr == deh_codeptr[value])
+              if (deh_bexptrs[i].cptr.v == deh_codeptr[value].v)
                 {
                   if (fpout) fprintf(fpout,"BEX [CODEPTR] -> FRAME %d = %s\n",
                                      indexnum, &deh_bexptrs[i].lookup[2]);
