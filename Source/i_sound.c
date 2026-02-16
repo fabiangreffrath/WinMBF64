@@ -131,6 +131,8 @@ static void stopchan(int handle)
    while(channelinfo[handle].lock)
       SDL_Delay(1);
 
+   SDL_LockAudio();
+
    if(channelinfo[handle].data)
    {
       channelinfo[handle].data = NULL;
@@ -144,7 +146,10 @@ static void stopchan(int handle)
                continue;
             if(channelinfo[cnum].id &&
                channelinfo[cnum].id->data == channelinfo[handle].id->data)
+            {
+               SDL_UnlockAudio();
                return; // still being used by some channel
+            }
          }
          
          // set sample to PU_CACHE level
@@ -153,6 +158,8 @@ static void stopchan(int handle)
    }
 
    channelinfo[handle].id = NULL;
+
+   SDL_UnlockAudio();
 }
 
 #define SOUNDHDRSIZE 8
